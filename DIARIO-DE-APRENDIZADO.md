@@ -117,3 +117,22 @@ thresholds: {
 Saída terminou com `level=error msg="thresholds on metrics 'http_req_duration' have been crossed"` e código de saída 99.
 
 **Conclusão de QA:** a API do Hub de Leitura **não erra** sob 80 usuários simultâneos cadastrando+logando, mas **não escala em velocidade** — passa de ~90ms de resposta média (5 VUs) para quase 1s de média (80 VUs), reprovando um critério razoável de UX (p95 < 500ms).
+
+## Passo 9 — Smoke test: carga mínima, thresholds rígidos
+
+Arquivo: [`scenarios/05-smoke-test.js`](scenarios/05-smoke-test.js)
+
+Diferente do teste de estresse (carga alta, achar o ponto de quebra), o smoke test usa **carga mínima** (2 VUs, 30s) para confirmar que os fluxos críticos continuam funcionando **e respondendo rápido**, antes de rodar testes mais pesados — é o "será que ligou?" que roda rápido e barato, ideal para CI/CD a cada push.
+
+Cobre 4 fluxos num único teste: login do admin, listar livros, listar usuários (autenticado), cadastro + login de um novo usuário.
+
+Novidade: threshold em cima da métrica `checks`, não só de HTTP:
+```js
+thresholds: {
+  http_req_duration: ['p(95)<300'], // rígido, porque a carga é mínima
+  http_req_failed: ['rate<0.01'],
+  checks: ['rate>0.99'],            // une check() e threshold no mesmo critério
+},
+```
+
+**Resultado:** todos os thresholds aprovados — `checks=100%`, `p(95)=93.1ms` (bem abaixo do limite de 300ms), `http_req_failed=0%`. Confirma que a base da API está saudável.

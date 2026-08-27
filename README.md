@@ -22,6 +22,7 @@ O processo de construção passo a passo, com as descobertas de cada teste, est�
 | [`scenarios/02-estresse-cadastro-login.js`](scenarios/02-estresse-cadastro-login.js) | Estresse: cadastro + login no mesmo fluxo, com `thresholds` | Rampa até 80 VUs |
 | [`scenarios/03-estresse-cadastro.js`](scenarios/03-estresse-cadastro.js) | Estresse isolado de `POST /users` (cadastro) | Rampa até 80 VUs |
 | [`scenarios/04-estresse-login.js`](scenarios/04-estresse-login.js) | Estresse isolado de `POST /login`, usando `setup()` para pré-criar usuários de teste | Rampa até 80 VUs |
+| [`scenarios/05-smoke-test.js`](scenarios/05-smoke-test.js) | Smoke test: valida os fluxos críticos (login, livros, usuários, cadastro) com carga mínima e thresholds rígidos | 2 VUs por 30s |
 
 ## Como rodar
 
