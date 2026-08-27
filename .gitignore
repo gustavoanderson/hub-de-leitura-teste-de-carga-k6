@@ -1,0 +1,7 @@
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Resultados de execuções do k6, caso um dia exportemos com --out
+results/
+*.json
